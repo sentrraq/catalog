@@ -1331,6 +1331,72 @@ h1, h2, h3, h4, .logo {
     line-height: 1.4;
 }
 
+/* ===== TIKTOK & FACEBOOK ICONS ===== */
+.tiktok .icon-bg {
+    background: linear-gradient(135deg, #000000, #25F4EE, #FE2C55);
+}
+
+.facebook .icon-bg {
+    background: linear-gradient(135deg, #1877F2, #0A7CFF);
+}
+
+/* ===== UPDATE CONTACT GRID ===== */
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+/* ===== UPDATE FOOTER SOCIAL ===== */
+.footer-social {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.social-link {
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #b0b0c0;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-link:hover,
+.social-link:focus {
+    transform: translateY(-3px);
+    outline: none;
+}
+
+.social-link:hover i,
+.social-link:focus i {
+    color: #ffffff;
+}
+
+/* Social media colors on hover */
+.social-link:hover:nth-child(1) { /* Instagram */
+    background: rgba(225, 48, 108, 0.2);
+}
+.social-link:hover:nth-child(2) { /* WhatsApp */
+    background: rgba(37, 211, 102, 0.2);
+}
+.social-link:hover:nth-child(3) { /* TikTok */
+    background: rgba(254, 44, 85, 0.2);
+}
+.social-link:hover:nth-child(4) { /* Facebook */
+    background: rgba(24, 119, 242, 0.2);
+}
+.social-link:hover:nth-child(5) { /* Email */
+    background: rgba(64, 224, 208, 0.2);
+}
+.social-link:hover:nth-child(6) { /* Location */
+    background: rgba(255, 107, 180, 0.2);
+}
 /* ===== ANIMATIONS ===== */
 @keyframes floatDevice {
     0%, 100% { 
