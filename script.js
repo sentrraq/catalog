@@ -9,33 +9,33 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeWebsite() {
     // Set current year in footer
     setCurrentYear();
-    
+
     // Initialize mobile menu
     initMobileMenu();
-    
+
     // Initialize sliders
     initProductSliders();
-    
+
     // Initialize cursor glow
     initCursorGlow();
-    
+
     // Initialize smooth scrolling
     initSmoothScrolling();
-    
+
     // Initialize animations
     initAnimations();
-    
+
     // Initialize navbar scroll effect
     initNavbarScroll();
-    
+
     // Initialize like buttons
     initLikeButtons();
-    
+
     // Initialize lazy loading for future images
     initLazyLoading();
-    
-    // Initialize analytics (optional)
-    // initAnalytics();
+
+    // Initialize cart
+    initCart();
 }
 
 // ===== UTILITY FUNCTIONS =====
@@ -592,6 +592,192 @@ if (typeof module !== 'undefined' && module.exports) {
         initializeWebsite,
         initProductSliders,
         initMobileMenu,
-        // etc...
     };
+}
+
+// ===== CART =====
+
+let cart = [];
+
+function initCart() {
+    const cartBtn = document.getElementById('cart-btn');
+    const cartClose = document.getElementById('cart-close');
+    const cartOverlay = document.getElementById('cart-overlay');
+    const cartCheckoutBtn = document.getElementById('cart-checkout-btn');
+
+    if (cartBtn) cartBtn.addEventListener('click', openCart);
+    if (cartClose) cartClose.addEventListener('click', closeCart);
+
+    if (cartOverlay) {
+        cartOverlay.addEventListener('click', function(e) {
+            if (e.target === cartOverlay) closeCart();
+        });
+    }
+
+    if (cartCheckoutBtn) cartCheckoutBtn.addEventListener('click', checkoutViaWhatsApp);
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const overlay = document.getElementById('cart-overlay');
+            if (overlay && overlay.classList.contains('active')) closeCart();
+        }
+    });
+
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const card = this.closest('.product-card');
+            if (!card) return;
+            addToCart({
+                id: card.dataset.productId,
+                name: card.dataset.productName,
+                price: parseInt(card.dataset.productPrice, 10),
+                stock: parseInt(card.dataset.productStock, 10),
+            });
+        });
+    });
+
+    renderCart();
+}
+
+function openCart() {
+    const overlay = document.getElementById('cart-overlay');
+    if (!overlay) return;
+    overlay.classList.add('active');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    const closeBtn = document.getElementById('cart-close');
+    if (closeBtn) closeBtn.focus();
+}
+
+function closeCart() {
+    const overlay = document.getElementById('cart-overlay');
+    if (!overlay) return;
+    overlay.classList.remove('active');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    const cartBtn = document.getElementById('cart-btn');
+    if (cartBtn) cartBtn.focus();
+}
+
+function addToCart(product) {
+    if (cart.find(item => item.id === product.id)) return;
+    cart.push(product);
+    renderCart();
+    setProductBtnState(product.id, true);
+    setStockDisplay(product.id, 0);
+
+    const cartBtn = document.getElementById('cart-btn');
+    if (cartBtn) {
+        cartBtn.classList.remove('bounce');
+        void cartBtn.offsetWidth;
+        cartBtn.classList.add('bounce');
+        setTimeout(() => cartBtn.classList.remove('bounce'), 300);
+    }
+}
+
+function removeFromCart(id) {
+    cart = cart.filter(item => item.id !== id);
+    renderCart();
+    setProductBtnState(id, false);
+
+    const card = document.querySelector(`.product-card[data-product-id="${id}"]`);
+    if (card) {
+        setStockDisplay(id, parseInt(card.dataset.productStock, 10));
+    }
+}
+
+function setProductBtnState(id, inCart) {
+    const card = document.querySelector(`.product-card[data-product-id="${id}"]`);
+    if (!card) return;
+    const btn = card.querySelector('.add-to-cart-btn');
+    if (!btn) return;
+
+    btn.disabled = inCart;
+    btn.classList.toggle('in-cart', inCart);
+    btn.innerHTML = inCart
+        ? '<i class="fas fa-check" aria-hidden="true"></i><span>Di Keranjang</span>'
+        : '<i class="fas fa-cart-plus" aria-hidden="true"></i><span>Add to Cart</span>';
+}
+
+function setStockDisplay(id, count) {
+    const card = document.querySelector(`.product-card[data-product-id="${id}"]`);
+    if (!card) return;
+    const el = card.querySelector('.stock-count');
+    if (!el) return;
+    el.textContent = count;
+    el.classList.toggle('out-of-stock', count === 0);
+}
+
+function renderCart() {
+    const cartCount = document.getElementById('cart-count');
+    const cartEmpty = document.getElementById('cart-empty');
+    const cartItemsList = document.getElementById('cart-items-list');
+    const cartFooter = document.getElementById('cart-footer');
+    const cartTotalPrice = document.getElementById('cart-total-price');
+    const cartCheckoutBtn = document.getElementById('cart-checkout-btn');
+    const cartItemsCountText = document.getElementById('cart-items-count-text');
+
+    const count = cart.length;
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+    if (cartCount) {
+        cartCount.textContent = count;
+        cartCount.classList.toggle('visible', count > 0);
+    }
+
+    if (cartEmpty) cartEmpty.style.display = count === 0 ? 'flex' : 'none';
+
+    if (cartItemsList) {
+        cartItemsList.style.display = count === 0 ? 'none' : 'flex';
+        cartItemsList.innerHTML = cart.map(item => `
+            <li class="cart-item">
+                <div class="cart-item-info">
+                    <div class="cart-item-name" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</div>
+                    <div class="cart-item-price">${formatPrice(item.price)}</div>
+                </div>
+                <button class="cart-item-remove"
+                    onclick="removeFromCart('${escapeHtml(item.id)}')"
+                    aria-label="Hapus ${escapeHtml(item.name)} dari keranjang">
+                    <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                </button>
+            </li>
+        `).join('');
+    }
+
+    if (cartFooter) cartFooter.style.display = count === 0 ? 'none' : 'block';
+    if (cartTotalPrice) cartTotalPrice.textContent = formatPrice(total);
+    if (cartItemsCountText) cartItemsCountText.textContent = `${count} item dipilih`;
+    if (cartCheckoutBtn) cartCheckoutBtn.disabled = count === 0;
+}
+
+function formatPrice(amount) {
+    return 'Rp ' + amount.toLocaleString('id-ID');
+}
+
+function escapeHtml(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+function checkoutViaWhatsApp() {
+    if (cart.length === 0) return;
+
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    let message = 'Halo Sentraq! 👋 Saya ingin memesan:\n\n';
+
+    cart.forEach((item, index) => {
+        message += `${index + 1}. ${item.name}\n`;
+        message += `   Harga: ${formatPrice(item.price)}\n\n`;
+    });
+
+    message += '━━━━━━━━━━━\n';
+    message += `💰 Total: ${formatPrice(total)}\n\n`;
+    message += 'Mohon konfirmasi ketersediaan. Terima kasih! 🙏';
+
+    const waUrl = 'https://wa.me/6285716577307?text=' + encodeURIComponent(message);
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
 }

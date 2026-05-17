@@ -58,6 +58,10 @@
             </button>
             
             <div class="nav-actions">
+                <button class="cart-btn" id="cart-btn" aria-label="Keranjang belanja">
+                    <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                    <span class="cart-count" id="cart-count" aria-live="polite">0</span>
+                </button>
                 <a href="#products" class="nav-link">
                     <span class="nav-text">Products</span>
                 </a>
@@ -151,7 +155,12 @@
 
             <div class="products-grid">
                 <!-- MacBook Pro 2020 i5 -->
-                <article class="product-card" aria-label="MacBook Pro 2020 i5 16GB 512GB">
+                <article class="product-card"
+                    data-product-id="mbp2020"
+                    data-product-name="MacBook Pro 2020 i5 16GB 512GB"
+                    data-product-price="7500000"
+                    data-product-stock="1"
+                    aria-label="MacBook Pro 2020 i5 16GB 512GB">
                     <div class="product-header">
                         <span class="product-badge">Grade A</span>
                         <div class="product-actions">
@@ -217,24 +226,30 @@
                         </div>
                     </div>
                     
+                    <div class="product-stock-info">
+                        <i class="fas fa-box" aria-hidden="true"></i>
+                        <span>Stok: <strong class="stock-count">1</strong> unit</span>
+                    </div>
                     <div class="product-footer">
                         <div class="price">
                             <span class="price-currency">Rp</span>
                             <span class="price-value">7.500</span>
                             <span class="price-suffix">.000</span>
                         </div>
-                        <a href="https://wa.me/6285716577307?text=Hi%20Sentraq,%20saya%20tertarik%20dengan%20MacBook%20Pro%2013%22%202020%20i5%2016GB%20512GB" 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        class="product-cta">
-                            <i class="fab fa-whatsapp" aria-hidden="true"></i>
-                            <span>Chat</span>
-                        </a>
+                        <button class="add-to-cart-btn" aria-label="Tambah ke keranjang">
+                            <i class="fas fa-cart-plus" aria-hidden="true"></i>
+                            <span>Add to Cart</span>
+                        </button>
                     </div>
                 </article>
 
                 <!-- MacBook Pro 2018 Touchbar Silver -->
-                <article class="product-card" aria-label="MacBook Pro 2018 Touchbar Silver">
+                <article class="product-card"
+                    data-product-id="mbp2018"
+                    data-product-name="MacBook Pro 2018 Touchbar Silver"
+                    data-product-price="6800000"
+                    data-product-stock="1"
+                    aria-label="MacBook Pro 2018 Touchbar Silver">
                     <div class="product-header">
                         <span class="product-badge" style="background: linear-gradient(135deg, #C0C0C0, #A9A9A9);">Grade A-</span>
                         <div class="product-actions">
@@ -315,24 +330,30 @@
                         </div>
                     </div>
                     
+                    <div class="product-stock-info">
+                        <i class="fas fa-box" aria-hidden="true"></i>
+                        <span>Stok: <strong class="stock-count">1</strong> unit</span>
+                    </div>
                     <div class="product-footer">
                         <div class="price">
                             <span class="price-currency">Rp</span>
                             <span class="price-value">6.800</span>
                             <span class="price-suffix">.000</span>
                         </div>
-                        <a href="https://wa.me/6285716577307?text=Hi%20Sentraq,%20saya%20tertarik%20dengan%20MacBook%20Pro%202018%20Touchbar%20Silver%20harga%20Rp%206.800.000" 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        class="product-cta">
-                            <i class="fab fa-whatsapp" aria-hidden="true"></i>
-                            <span>Chat</span>
-                        </a>
+                        <button class="add-to-cart-btn" aria-label="Tambah ke keranjang">
+                            <i class="fas fa-cart-plus" aria-hidden="true"></i>
+                            <span>Add to Cart</span>
+                        </button>
                     </div>
                 </article>
 
                 <!-- HP OMEN Gaming Laptop -->
-                <article class="product-card" aria-label="HP OMEN Gaming Laptop">
+                <article class="product-card"
+                    data-product-id="hpomen"
+                    data-product-name="HP OMEN Gaming Laptop"
+                    data-product-price="15500000"
+                    data-product-stock="1"
+                    aria-label="HP OMEN Gaming Laptop">
                     <div class="product-header">
                         <span class="product-badge" style="background: linear-gradient(135deg, #0096D6, #7B68EE);">GAMING</span>
                         <div class="product-actions">
@@ -401,19 +422,20 @@
                         </div>
                     </div>
                     
+                    <div class="product-stock-info">
+                        <i class="fas fa-box" aria-hidden="true"></i>
+                        <span>Stok: <strong class="stock-count">1</strong> unit</span>
+                    </div>
                     <div class="product-footer">
                         <div class="price">
                             <span class="price-currency">Rp</span>
                             <span class="price-value">15.500</span>
                             <span class="price-suffix">.000</span>
                         </div>
-                        <a href="https://wa.me/6285716577307?text=Hi%20Sentraq,%20saya%20tertarik%20dengan%20HP%20OMEN%20Gaming%20Laptop%20harga%20Rp%2015.500.000" 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        class="product-cta" style="background: linear-gradient(135deg, #0096D6, #7B68EE);">
-                            <i class="fab fa-whatsapp" aria-hidden="true"></i>
-                            <span>Chat</span>
-                        </a>
+                        <button class="add-to-cart-btn" aria-label="Tambah ke keranjang">
+                            <i class="fas fa-cart-plus" aria-hidden="true"></i>
+                            <span>Add to Cart</span>
+                        </button>
                     </div>
                 </article>
             </div>
@@ -632,6 +654,44 @@
             </div>
         </div>
     </footer>
+
+    <!-- Cart Overlay -->
+    <div class="cart-overlay" id="cart-overlay" role="dialog" aria-label="Keranjang Belanja" aria-modal="true" aria-hidden="true">
+        <div class="cart-drawer">
+            <div class="cart-header">
+                <h2 class="cart-title">
+                    <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                    Keranjang Belanja
+                </h2>
+                <button class="cart-close" id="cart-close" aria-label="Tutup keranjang">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="cart-body">
+                <div class="cart-empty" id="cart-empty">
+                    <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                    <p>Keranjang masih kosong</p>
+                    <span>Tambahkan produk untuk mulai belanja</span>
+                </div>
+                <ul class="cart-items-list" id="cart-items-list" aria-label="Item di keranjang"></ul>
+            </div>
+            <div class="cart-footer" id="cart-footer" style="display:none">
+                <div class="cart-summary">
+                    <div class="cart-total-row">
+                        <span>Total Belanja</span>
+                        <span class="cart-total-price" id="cart-total-price">Rp 0</span>
+                    </div>
+                    <div class="cart-items-count">
+                        <span id="cart-items-count-text">0 item dipilih</span>
+                    </div>
+                </div>
+                <button class="cart-checkout-btn" id="cart-checkout-btn" disabled>
+                    <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                    <span>Pesan via WhatsApp</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script src="script.js" defer></script>
